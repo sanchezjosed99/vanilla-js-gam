@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMO RPG Game</title>
+    <link rel= "stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+    <nav>
+        <ul class="nav-bar">
+            <li><a href="home.html" id="home">Home</a></li>
+            <li><a href="inventory.html" id="inventory">Inventory</a></li>
+            <li><a href="market.html" id="market">Market</a></li>
+            <li><a href="mail.html" id="mail">Mail</a></li>
+            <li><a href="settings.html" id="settings">Settings</a></li>
+        </ul>
+    </nav>
+    </header>
+<div>
+    <h2>Player's Inventory</h2>
+    <div id="inventory-container">
+        <!-- Inventory items will be dynamically populated here -->
+    </div>
+    <button id="sort-button">Sort</button>
+    <label for="filter-type">Filter by Type:</label>
+    <select id="filter-type">
+        <option value="Weapon">Weapon</option>
+        <option value="Armor">Armor</option>
+        <option value="Consumable">Consumable</option>
+        <!-- Add more options for different item types as needed -->
+    </select>
+    <button id="filter-button">Filter</button>
+</div>
+
+<script>
+    // Define inventory array to store player's items
+    let inventory = [];
+
+    for (let i = 0; i < 20; i++) {
+        inventory.push({ name: `Item ${i+1}`, type: 'Miscellaneous' });
+    }
+
+    // Function to display inventory items
+    function displayInventory(filteredInventory) {
+        const inventoryContainer = document.getElementById('inventory-container');
+        inventoryContainer.innerHTML = ''; // Clear previous content
+
+        const itemsToDisplay = filteredInventory || inventory;
+
+        // Iterate over inventory items and display them
+        itemsToDisplay.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.textContent = `${item.name} - ${item.type}`;
+            inventoryContainer.appendChild(itemElement);
+        });
+    }
+
+    // Function to sort inventory items
+    function sortInventory() {
+        inventory.sort((a, b) => a.name.localeCompare(b.name));
+        displayInventory();
+    }
+
+    // Function to filter inventory items by type
+    function filterInventory(type) {
+        const filteredInventory = inventory.filter(item => item.type === type);
+        displayInventory(filteredInventory);
+    }
+
+    // Event listener for sorting button
+    document.getElementById('sort-button').addEventListener('click', function(event) {
+        event.preventDefault();
+        sortInventory();
+    });
+
+    // Event listener for filtering button
+    document.getElementById('filter-button').addEventListener('click', function(event) {
+        event.preventDefault();
+        const filterType = document.getElementById('filter-type').value;
+        filterInventory(filterType);
+    });
+
+    // Display initial inventory
+    displayInventory();
+</script>
+</body>
+</html>
