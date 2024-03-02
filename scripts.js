@@ -4,12 +4,18 @@ let currentPage = ''; // Track the current page
 // Function to load content without refreshing the page
 function loadContent(url) {
     fetch(url)
-    .then(response => response.text())
+    .then(response => {
+        if (!response.ok) {throw new Error('Network response was not ok');}
+        return response.text();})
     .then(html => {
-        content.innerHTML = html;
-    });
+        content.innerHTML = html; // Set the fetched HTML content to the innerHTML of the content element
+    })
+    .catch(error => console.error('Error fetching content:', error)); // Handle any errors that occur during fetching
 }
-loadContent(home.html);
+
+// Initial load of content
+loadContent('home.html');
+
 // Function to handle navigation clicks
 function handleNavigation(event) {
     event.preventDefault();

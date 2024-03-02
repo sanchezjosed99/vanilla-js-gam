@@ -9,55 +9,55 @@
 <body>
     <h1>Welcome to Castle Craft! Sign in below.</h1>
     <div class="formBox">
-    <fieldset>
-        <form id="signin-form" onsubmit="return validateForm(event)" method="post" action="Nav%20Bar/home.html">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" autocomplete="username" required>
-            <br>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" autocomplete="email" required>
-            <br>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" autocomplete="current-password" required>
-            <input type="checkbox" id="bypassBox" name="guest" value="">
-            <label for="guest">Sign in as Guest</label>
-            <br>
-            <button type="submit" id="submit" name="submit">Submit</button>
-        </form>
-    </fieldset>
+        <fieldset>
+            <form id="signin-form" onsubmit="return validateForm(event)" method="post" action="/Nav%20Bar/home.html">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" autocomplete="username" >
+                <br>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" autocomplete="email" >
+                <br>
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" autocomplete="current-password" >
+                <input type="checkbox" id="guest" name="guest">
+                <label for="guest">Sign in as Guest</label>
+                <br>
+                <button type="submit" id="submit" name="submit">Submit</button>
+            </form>
+        </fieldset>
     </div>
     <div id="error-message" style="color: red; display: none;">Username is already taken. Please choose a different one.</div>
     <script>
         function validateForm(event) {
-    event.preventDefault();
-    const guestCheckBox = document.getElementById('bypassBox');
-    const submitButton = document.getElementById('submit');
+            event.preventDefault();
+            const guestCheckBox = document.getElementById('guest');
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-    if (guestCheckBox.checked && event.target === submitButton) {
-        window.location.href = 'Nav%20Bar/home.html';
-        return false; // Stop the function and redirect the user
-    } else {
-        const username = document.getElementById('username').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-
-        if (!username.trim() || !email.trim() || !password.trim()) {
-            alert('Please fill out all required fields or sign in as a guest.');
-            return false; // Prevent form submission
-        } else {
-            if (isUsernameTaken(username)) {
-                document.getElementById('error-message').style.display = 'block';
-                return false; // Prevent form submission
+            if (guestCheckBox.checked) {
+                window.location.href = '/Nav%20Bar/home.html';
+                return false; // Stop the form submission and redirect the user
             } else {
-                window.location.href = 'Nav%20Bar/home.html';
-                return true; // Allow form submission
+                if (!username.trim() || !email.trim() || !password.trim()) {
+                    alert('Please fill out all required fields or sign in as a guest.');
+                    return false; // Stop the form submission
+                } else {
+                    if (isUsernameTaken(username)) {
+                        document.getElementById('error-message').style.display = 'block';
+                        return false; // Stop the form submission
+                    } else {
+                        window.location.href = '/Nav%20Bar/home.html';
+                        return false; // Stop the form submission and redirect the user
+                    }
+                }
             }
         }
-    }
-}
+
         function isUsernameTaken(username) {
             return username.toLowerCase() === 'testuser';
         }
     </script>
+    <script src="/scripts.js"></script>
 </body>
 </html>
