@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MMO RPG Game</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/CSS/client.css">
 </head>
 <body>
     <h1>Welcome to Castle Craft! Sign in below.</h1>
@@ -29,31 +29,32 @@
     <div id="error-message" style="color: red; display: none;">Username is already taken. Please choose a different one.</div>
     <script>
         function validateForm(event) {
-            event.preventDefault();
-            const guestCheckbox = document.getElementById('bypassBox');
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+    event.preventDefault();
+    const guestCheckBox = document.getElementById('bypassBox');
+    const submitButton = document.getElementById('submit');
 
-            if (guestCheckbox.checked) {
-                window.location.href = 'Nav%20Bar/home.html';
-                return true; // Allow form submission for guest
+    if (guestCheckBox.checked && event.target === submitButton) {
+        window.location.href = 'Nav%20Bar/home.html';
+        return false; // Stop the function and redirect the user
+    } else {
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!username.trim() || !email.trim() || !password.trim()) {
+            alert('Please fill out all required fields or sign in as a guest.');
+            return false; // Prevent form submission
+        } else {
+            if (isUsernameTaken(username)) {
+                document.getElementById('error-message').style.display = 'block';
+                return false; // Prevent form submission
             } else {
-                if (!username.trim() || !email.trim() || !password.trim()) {
-                    alert('Please fill out all required fields or sign in as a guest.');
-                    return false; // Prevent form submission
-                } else {
-                    if (isUsernameTaken(username)) {
-                        document.getElementById('error-message').style.display = 'block';
-                        return false; // Prevent form submission
-                    } else {
-                        window.location.href = 'Nav%20Bar/home.html';
-                        return true; // Allow form submission
-                    }
-                }
+                window.location.href = 'Nav%20Bar/home.html';
+                return true; // Allow form submission
             }
         }
-
+    }
+}
         function isUsernameTaken(username) {
             return username.toLowerCase() === 'testuser';
         }

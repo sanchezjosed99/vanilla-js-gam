@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMO RPG Game</title>
+    <link rel="stylesheet" href="/CSS/main.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="nav-bar">
+                <li><a href="home.html" id="home">Home</a></li>
+                <li><a href="inventory.html" id="inventory">Inventory</a></li>
+                <li><a href="market.html" id="market">Market</a></li>
+                <li><a href="mail.html" id="mail">Mail</a></li>
+                <li><a href="settings.html" id="settings">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div>
+        <h2>Player's Inventory</h2>
+        <div id="inventory-container">
+            <!-- Inventory items will be dynamically populated here -->
+        </div>
+        <!-- Modal for displaying item details -->
+        <div id="item-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Item Details</h3>
+                <p id="item-name"></p>
+                <p id="item-amount"></p>
+                <p id="item-value"></p>
+                <p id="item-stats"></p>
+                <p id="item-equipability"></p>
+                <button id="sell-button">Sell to Vendor</button>
+            </div>
+        </div>
+        <button id="sort-button">Sort</button>
+        <label for="filter-type">Filter by Type:</label>
+        <select id="filter-type">
+            <option value="Weapon">Weapon</option>
+            <option value="Armor">Armor</option>
+            <option value="Consumable">Consumable</option>
+            <!-- Add more options for different item types as needed -->
+        </select>
+        <button id="filter-button">Filter</button>
+    </div>
+
+    <script>
+        // Define inventory array to store player's items
+        let inventory = [];
+
+        // Function to display inventory items
+        function displayInventory(filteredInventory) {
+            const inventoryContainer = document.getElementById('inventory-container');
+            inventoryContainer.innerHTML = ''; // Clear previous content
+
+            const itemsToDisplay = filteredInventory || inventory;
+
+            // Iterate over inventory items and display them
+            itemsToDisplay.forEach((item, index) => {
+                const itemElement = document.createElement('div');
+                itemElement.textContent = `${item.name} - ${item.type}`;
+                itemElement.classList.add('item');
+                itemElement.setAttribute('data-index', index);
+                inventoryContainer.appendChild(itemElement);
+            });
+
+            // Add click event listener to each item element
+            document.querySelectorAll('.item').forEach(itemElement => {
+                itemElement.addEventListener('click', showItemDetails);
+            });
+        }
+
+        // Function to show item details in modal
+        function showItemDetails(event) {
+            const index = event.target.dataset.index;
+            const item = inventory[index];
+            const modal = document.getElementById('item-modal');
+            const itemName = document.getElementById('item-name');
+            const itemAmount = document.getElementById('item-amount');
+            const itemValue = document.getElementById('item-value');
+            const itemStats = document.getElementById('item-stats');
+            const itemEquipability = document.getElementById('item-equipability');
+
+            itemName.textContent = `Name: ${item.name}`;
+            itemAmount.textContent = `Amount: ${item.amount}`;
+            itemValue.textContent = `Value: ${item.value}`;
+            itemStats.textContent = `Stats: ${item.stats}`;
+            itemEquipability.textContent = `Equipable by: ${item.equipability}`;
+
+            // Show modal
+            modal.style.display = 'block';
+        }
+
+        // Event listener for closing modal
+        document.querySelector('.close').addEventListener('click', function() {
+            const modal = document.getElementById('item-modal');
+            modal.style.display = 'none';
+        });
+
+        // Function to sort inventory items
+        function sortInventory() {
+            inventory.sort((a, b) => a.name.localeCompare(b.name));
+            displayInventory();
+        }
+
+        // Function to filter inventory items by type
+        function filterInventory(type) {
+            const filteredInventory = inventory.filter(item => item.type === type);
+            displayInventory(filteredInventory);
+        }
+
+        // Event listener for sorting button
+        document.getElementById('sort-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            sortInventory();
+        });
+
+        // Event listener for filtering button
+        document.getElementById('filter-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            const filterType = document.getElementById('filter-type').value;
+            filterInventory(filterType);
+        });
+
+        // Initialize inventory and display it
+        // For demonstration purposes, pre-fill the inventory with some items
+        inventory = [
+            { name: 'Sword', type: 'Weapon', amount: 1, value: 10, stats: '+5 Attack', equipability: 'Warrior' },
+            { name: 'Shield', type: 'Armor', amount: 1, value: 15, stats: '+10 Defense', equipability: 'Warrior' },
+            { name: 'Potion', type: 'Consumable', amount: 3, value: 5, stats: 'Restores 50 HP', equipability: 'All' },
+        ];
+        displayInventory();
+    </script>
+</body>
+</html>
